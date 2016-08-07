@@ -5,5 +5,11 @@
 	</head>
 	<body>
 		<h1>This is the index page.</h1>
+		<form action="/upload" method="post" enctype="multipart/form-data">{% csrf_token %}
+			Select file to upload:
+			<input type="file" name="fileToUpload" id="fileToUpload">
+			<input type="text" name="textToUpload">
+			<input type="submit" value="Upload Image" name="submit">
+		</form>
 	</body>
 </html>

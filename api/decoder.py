@@ -1,9 +1,8 @@
-#import numpy
-
-import numpy
-import aubio
 import math
-from aubio import pitch
+
+#import aubio
+import numpy
+
 
 samplerate = 44100
 hop = 2048
@@ -53,7 +52,8 @@ def find_freq(samples):
 
 
 def decoder(fname):
-    s = aubio.source(fname, samplerate, hop)
+    return str()
+    #s = aubio.source(fname, samplerate, hop)
 
 
     frames = []
@@ -112,15 +112,15 @@ def decoder(fname):
 #    print len(bits)*6/8
     return bits
 
+
 def decode(s):
-    
+
     # TODO Save to file
-    
     fname = 'recording.wav'
     b64 = decoder(fname)
+
+    #TODO convert return bits to ascii text
    
     # TODO return info 
+    return 'decoded(' + str(s) + ')'
 
-
-def encode(s):
-    return 'encoded(' + s + ')'
