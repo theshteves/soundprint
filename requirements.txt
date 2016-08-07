@@ -1,0 +1,4 @@
+Django==1.10.0
+Jinja2==2.8
+requests==2.8.0
+virtualenv==13.1.0
