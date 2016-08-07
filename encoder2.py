@@ -20,7 +20,7 @@ def sinepack(a,b):
     frequency2 = 4500 + 50*b
     samples = ""    
     for x in range(frames):        
-        samples += pack ('h', (maxVol*sin(x*frequency1/bitrate)/2)+(maxVol*sin(x*frequency2/bitrate)/2))        
+        samples += pack ('h', (maxVol*sin(x*frequency1*2*pi/bitrate)/2)+(maxVol*sin(x*frequency2*2*pi/bitrate)/2))        
     return samples
  
 elements = {x:n for n,x in enumerate(base_64)}
