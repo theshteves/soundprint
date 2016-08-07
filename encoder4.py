@@ -54,8 +54,8 @@ wf.setparams((1,2,bitrate,0,'NONE','not compressed'))
 enc_loop = encoded.replace('=', '')
 r = len(enc_loop)%4
 for c in range(0, len(enc_loop)-r, 4):
-    a, b, e, f = enc_loop[c], enc_loop[c+1],enc_loop[c+2],enc_loop[c+3]     
-    wf.writeframes(sinepack(0,elements[a],elements[b],elements[e],elements[f]))
+    a, b, d, e = enc_loop[c], enc_loop[c+1],enc_loop[c+2],enc_loop[c+3]     
+    wf.writeframes(sinepack(0,elements[a],elements[b],elements[d],elements[e]))
     
 for c in range(len(enc_loop)-r,len(enc_loop),r):
     if (r==1):
@@ -66,6 +66,6 @@ for c in range(len(enc_loop)-r,len(enc_loop),r):
         wf.writeframes(sinepack(r,elements[a],elements[b]))
     elif (r==3):
         a,b,c = enc_loop[c], enc_loop(c+1), enc_loop(c+2)
-        wf.writeframes(sinepack(r,elements[a],elements[b],elements[e]))    
+        wf.writeframes(sinepack(r,elements[a],elements[b],elements[c]))    
 wf.close
 
