@@ -1,21 +1,34 @@
+import json
+
 from django.shortcuts import render
 from django.http import HttpResponse
 
-# POST request
-def decode(request):
-    
-    # Accept audio & return text
-    return HttpResponse('decoding...')
+import tool
 
 
-# POST request
-def encode(request):
+def api(request):
 
-    # Accept text & return audio
-    return HttpResponse('encoding...')
+    response = {}
+    if request.method == 'GET':
+
+        # Return encoded message (soundprint)
+        if request.GET.get('message'):
+            response['soundprint'] = tool.encode(request.GET['message'])
+
+        # Return decoded message
+        elif request.GET.get('soundprint'):
+            response['message'] = tool.decode(request.GET['soundprint'])
+
+        else:
+            response['error'] = 'missing 1 parameter (message or soundprint)'
+
+    else:
+        response['error'] = 'must send GET request'
+
+    return HttpResponse(json.dumps(response, indent=4), \
+                        content_type='application/json')
 
 
-# GET request
 def index(request):
     return render(request, 'index.html')
 
