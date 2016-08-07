@@ -15,17 +15,31 @@ maxVol=2**15-1.0  #max vol in decibels
 base_64 = [chr(x) for x in (range(65,91)+range(97,123)+range(48,58)+[45,95])]
 
 #Create mono sine wave superimposed from 2 waves
-def sinepack(a,b,c,d):    
-    f1 = 400 + 30*a
-    f2 = 2500 + +30*b
-    f3 = 4500 + 30*c
-    f4 = 6500 + 30*d
-    quadrant = maxVol/4    
+def sinepack(r,a,b=None,c=None,d=None):    
+    f1 = ((400 + 30*a)*2*pi) / bitrate
+    
+    if (b!=None):
+        f2 = ((2500 + 30*b)*2*pi) / bitrate
+    else:
+        f2 = 0
+        
+    if (c!=None):
+        f3 = ((4500 + 30*c)*2*pi) / bitrate
+    else:
+        f3 = 0
+        
+    if (d!=None):
+        f4 = ((6500 + 30*d)*2*pi) / bitrate
+    else:
+        f4 = 0
+    
+    quadrant = maxVol/(4-r)
+    
     samples = ""    
     for x in range(frames):        
-        samples += pack ('h', (quadrant*sin(x*f1*2*pi/bitrate)+quadrant*sin(x*f2*2*pi/bitrate)+quadrant*sin(x*f3*2*pi/bitrate)+quadrant*sin(x*f4*2*pi/bitrate)))
+        samples += pack ('h', ((quadrant*sin(x*f1))+(quadrant*sin(x*f2))+(quadrant*sin(x*f3))+(quadrant*sin(x*f4))))
     return samples
- 
+
 elements = {x:n for n,x in enumerate(base_64)}
 
 #encode text here
@@ -38,9 +52,20 @@ wf.setparams((1,2,bitrate,0,'NONE','not compressed'))
 
 #convert each char in 64base string into sound
 enc_loop = encoded.replace('=', '')
-less = len(enc_loop)%4
-for c in range(0, len(enc_loop)-less, 4):
+r = len(enc_loop)%4
+for c in range(0, len(enc_loop)-r, 4):
     a, b, e, f = enc_loop[c], enc_loop[c+1],enc_loop[c+2],enc_loop[c+3]     
-    wf.writeframes(sinepack(elements[a],elements[b],elements[e],elements[f]))    
+    wf.writeframes(sinepack(0,elements[a],elements[b],elements[e],elements[f]))
+    
+for c in range(len(enc_loop)-r,len(enc_loop),r):
+    if (r==1):
+        a = enc_loop[c]
+        wf.writeframes(sinepack(r,elements[a]))
+    elif (r==2):
+        a,b = enc_loop[c], enc_loop[c+1]
+        wf.writeframes(sinepack(r,elements[a],elements[b]))
+    elif (r==3):
+        a,b,c = enc_loop[c], enc_loop(c+1), enc_loop(c+2)
+        wf.writeframes(sinepack(r,elements[a],elements[b],elements[e]))    
 wf.close
 
